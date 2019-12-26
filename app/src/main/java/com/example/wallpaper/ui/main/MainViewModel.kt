@@ -3,10 +3,9 @@ package com.example.wallpaper.ui.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.paging.PagedList
-import com.example.wallpaper.data.main.MainRepository
+import com.example.wallpaper.data.MainRepository
 import com.example.wallpaper.model.ImageModel
 import com.example.wallpaper.ui.base.BaseViewModel
-import timber.log.Timber
 
 import javax.inject.Inject
 

@@ -1,4 +1,4 @@
-package com.example.wallpaper.data.main
+package com.example.wallpaper.data
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations

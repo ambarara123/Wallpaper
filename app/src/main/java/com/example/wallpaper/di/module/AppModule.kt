@@ -6,6 +6,7 @@ import android.content.Context
 import com.example.wallpaper.MyApplication
 import com.example.wallpaper.network.NetworkService
 import com.example.wallpaper.utils.BASE_URL
+import com.example.wallpaper.utils.DownloadMangerUtil
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -56,19 +57,13 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideDownloadManager(context: Context) : DownloadManager{
-        return context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-    }
-
-    @Provides
-    @Singleton
-    fun provideDestinationFile(context: Context): File {
-        return File(context.getExternalFilesDir(null),"dummy.png")
-    }
-
-    @Provides
-    @Singleton
     fun provideWallpaperManager(context: Context): WallpaperManager{
         return WallpaperManager.getInstance(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDownloadManagerUtil(context: Context): DownloadMangerUtil{
+        return DownloadMangerUtil(context)
     }
 }

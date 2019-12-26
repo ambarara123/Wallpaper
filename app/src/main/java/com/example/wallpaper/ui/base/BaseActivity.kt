@@ -10,12 +10,12 @@ import com.example.wallpaper.BR
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
-abstract class BaseActivity<B: ViewDataBinding,VM : ViewModel> : DaggerAppCompatActivity() {
-    lateinit var viewModel : VM
-    lateinit var binding : B
+abstract class BaseActivity<B : ViewDataBinding, VM : ViewModel> : DaggerAppCompatActivity() {
+    lateinit var viewModel: VM
+    lateinit var binding: B
 
     @Inject
-    lateinit var viewModelFactory : ViewModelProvider.Factory
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,15 +23,16 @@ abstract class BaseActivity<B: ViewDataBinding,VM : ViewModel> : DaggerAppCompat
         bindView(getLayoutId())
     }
 
-    fun bindView(layoutId : Int){
-        binding = DataBindingUtil.setContentView(this,layoutId)
-        viewModel = ViewModelProvider(this,viewModelFactory).get(getViewModelClass())
-        binding.setVariable(BR.viewModel,viewModel)
+    private fun bindView(layoutId: Int) {
+        binding = DataBindingUtil.setContentView(this, layoutId)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(getViewModelClass())
+        binding.setVariable(BR.viewModel, viewModel)
     }
 
-    abstract fun getViewModelClass() : Class<VM>
+    abstract fun getViewModelClass(): Class<VM>
 
-    @LayoutRes abstract fun getLayoutId() : Int
+    @LayoutRes
+    abstract fun getLayoutId(): Int
 
 
 }
