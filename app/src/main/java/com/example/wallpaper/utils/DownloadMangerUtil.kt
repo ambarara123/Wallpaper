@@ -3,11 +3,10 @@ package com.example.wallpaper.utils
 import android.app.DownloadManager
 import android.content.Context
 import android.net.Uri
-import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
-class DownloadMangerUtil(private val context: Context) {
+class DownloadMangerUtil @Inject constructor(val context: Context) {
 
     private val downloadManager: DownloadManager by lazy {
         context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
@@ -16,8 +15,8 @@ class DownloadMangerUtil(private val context: Context) {
     fun downloadImage(
         url: String,
         fileName: String? = null,
-        fileType: String = "png"
-    ) : Long {
+        fileType: ImageType = ImageType.PNG
+    ): Long {
         val file = getFile(fileName, fileType)
         val request = createDownloadRequest(url, file)
         return downloadManager.enqueue(request)
@@ -34,8 +33,8 @@ class DownloadMangerUtil(private val context: Context) {
             .setDestinationUri(Uri.fromFile(file))
     }
 
-    private fun getFile(fileName: String?, fileType: String): File {
+    private fun getFile(fileName: String?, fileType: ImageType): File {
         val name = fileName ?: "default"
-        return File(context.getExternalFilesDir(null), "${name}.$fileType")
+        return File(context.getExternalFilesDir(null), "${name}.${fileType.value}")
     }
 }

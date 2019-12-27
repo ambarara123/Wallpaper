@@ -1,6 +1,5 @@
 package com.example.wallpaper.di.module
 
-import android.app.DownloadManager
 import android.app.WallpaperManager
 import android.content.Context
 import com.example.wallpaper.MyApplication
@@ -13,7 +12,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.File
 import javax.inject.Singleton
 
 @Module
@@ -27,7 +25,7 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun providesOkhttp():OkHttpClient{
+    fun providesOkhttp(): OkHttpClient {
         return OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }).build()
@@ -35,7 +33,10 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(okHttpClient: OkHttpClient,gsonConverterFactory: GsonConverterFactory):Retrofit{
+    fun provideRetrofit(
+        okHttpClient: OkHttpClient,
+        gsonConverterFactory: GsonConverterFactory
+    ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(gsonConverterFactory)
@@ -51,19 +52,20 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideGsonConvertorFactory():GsonConverterFactory{
+    fun provideGsonConvertorFactory(): GsonConverterFactory {
         return GsonConverterFactory.create()
     }
 
     @Provides
     @Singleton
-    fun provideWallpaperManager(context: Context): WallpaperManager{
+    fun provideWallpaperManager(context: Context): WallpaperManager {
         return WallpaperManager.getInstance(context)
     }
 
-    @Provides
+   /* @Provides
     @Singleton
-    fun provideDownloadManagerUtil(context: Context): DownloadMangerUtil{
+    fun provideDownloadManagerUtil(context: Context): DownloadMangerUtil {
         return DownloadMangerUtil(context)
-    }
+    }*/
+
 }

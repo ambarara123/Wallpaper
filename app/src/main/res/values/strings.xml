@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Wallpaper</string>
     <string name="transition_hello">hello</string>
+    <string name="image_downloaded">IMAGE DOWNLOADED</string>
+    <string name="png">png</string>
+    <string name="already_downloaded">ALREADY DOWNLOADED</string>
 </resources>

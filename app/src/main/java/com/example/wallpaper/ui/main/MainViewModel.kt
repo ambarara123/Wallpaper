@@ -14,7 +14,8 @@ class MainViewModel @Inject constructor(private val mainRepository: MainReposito
 
     val mainLiveData: LiveData<PagedList<ImageModel>> =
         Transformations.map(mainRepository.imageLiveData) {
-            it }
+            it
+        }
 
     fun getData() {
         mainRepository.fetchData()

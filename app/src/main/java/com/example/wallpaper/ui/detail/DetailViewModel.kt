@@ -6,10 +6,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.wallpaper.ui.base.BaseViewModel
-import com.example.wallpaper.utils.DownloadMangerUtil
-import kotlinx.coroutines.*
-import java.io.File
-import java.lang.Exception
+import com.example.wallpaper.utils.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class DetailViewModel @Inject constructor(
@@ -19,14 +19,14 @@ class DetailViewModel @Inject constructor(
 
     private val _liveDownloadID = MutableLiveData<Long>()
 
-    val liveDownloadID : LiveData<Long>
-    get() = _liveDownloadID
+    val liveDownloadID: LiveData<Long>
+        get() = _liveDownloadID
 
-    fun downloadWallpaper(downloadUrl: String, imageName: String) : Long {
-       return downloadMangerUtil.downloadImage(downloadUrl, imageName)
+    fun downloadWallpaper(downloadUrl: String, imageName: String): Long {
+        return downloadMangerUtil.downloadImage(downloadUrl, imageName)
     }
 
-    fun setWallpaper(downloadUrl: String, imageName: String, imageType: String) {
+    fun setWallpaper(downloadUrl: String, imageName: String, imageType: ImageType) {
         viewModelScope.launch {
             setWallpaperBackground(downloadUrl, imageName, imageType)
         }
@@ -35,18 +35,18 @@ class DetailViewModel @Inject constructor(
     private suspend fun setWallpaperBackground(
         downloadUrl: String,
         imageName: String,
-        imageType: String
+        imageType: ImageType
     ) {
         when {
             checkIfFileExists(imageName, imageType) -> setWallpaperWithPath(imageName, imageType)
             else -> {
-               val id =  downloadWallpaper(downloadUrl, imageName)
+                val id = downloadWallpaper(downloadUrl, imageName)
                 _liveDownloadID.value = id
             }
         }
     }
 
-    private suspend fun setWallpaperWithPath(imageName: String, imageType: String) {
+    private suspend fun setWallpaperWithPath(imageName: String, imageType: ImageType) {
         withContext(Dispatchers.IO) {
             val bitmap =
                 BitmapFactory.decodeFile(getPath(imageName, imageType))
@@ -58,18 +58,6 @@ class DetailViewModel @Inject constructor(
         }
     }
 
-    fun checkIfFileExists(imageName: String, imageType: String): Boolean {
-        val pathName = getPath(imageName, imageType)
 
-        val file = File(pathName)
-        if (file.exists()) {
-            return true
-        }
-        return false
-    }
 
-    private fun getPath(imageName: String, imageType: String): String {
-        val pathName = "/sdcard/Android/data/com.example.wallpaper/files/$imageName.$imageType"
-        return pathName
-    }
 }

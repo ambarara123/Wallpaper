@@ -8,12 +8,17 @@ import androidx.lifecycle.Observer
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.wallpaper.R
 import com.example.wallpaper.databinding.ActivityMainBinding
 import com.example.wallpaper.model.ImageModel
 import com.example.wallpaper.ui.base.BaseActivity
 import com.example.wallpaper.ui.detail.DetailActivity
-import com.example.wallpaper.utils.*
+import com.example.wallpaper.utils.KEY_INTENT_BUNDLE
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(),
     MainRecyclerAdapter.ItemClickListener {
@@ -31,10 +36,12 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(),
     }
 
     private fun initRecyclerView() {
-        binding.imageRecyclerView.layoutManager =
-            GridLayoutManager(this, 2)
-        binding.imageRecyclerView.adapter = MainRecyclerAdapter(this)
-        binding.imageRecyclerView.itemAnimator = DefaultItemAnimator()
+        with(binding) {
+            imageRecyclerView.layoutManager =
+                GridLayoutManager(this@MainActivity,2)
+            imageRecyclerView.adapter = MainRecyclerAdapter(this@MainActivity)
+            imageRecyclerView.itemAnimator = DefaultItemAnimator()
+        }
     }
 
     private fun updateAdapter(list: PagedList<ImageModel>) {
@@ -53,12 +60,16 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(),
     override fun onClick(position: Int, imageModel: ImageModel, sharedImageView: ImageView) {
         val intentData: Bundle = DetailActivity.getBundle(imageModel)
         val intent = Intent(this, DetailActivity::class.java)
-      val options =  ActivityOptionsCompat.makeSceneTransitionAnimation(
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
             this,
             sharedImageView,
             getString(R.string.transition_hello)
         )
         intent.putExtra(KEY_INTENT_BUNDLE, intentData)
-        startActivity(intent,options.toBundle())
+        startActivity(intent, options.toBundle())
+        CoroutineScope(Dispatchers.Default).launch {
+
+        }
     }
 }
+

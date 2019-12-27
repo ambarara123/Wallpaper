@@ -13,8 +13,8 @@ import com.example.wallpaper.model.ImageModel
 class MainRecyclerAdapter(private val itemClickListener: ItemClickListener) :
     PagedListAdapter<ImageModel, MainRecyclerAdapter.ViewHolder>(diffCallback) {
 
-    interface ItemClickListener{
-        fun onClick(position: Int,imageModel: ImageModel,sharedImageView: ImageView)
+    interface ItemClickListener {
+        fun onClick(position: Int, imageModel: ImageModel, sharedImageView: ImageView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -31,18 +31,19 @@ class MainRecyclerAdapter(private val itemClickListener: ItemClickListener) :
         holder.bind(getItem(holder.adapterPosition)!!)
     }
 
-    inner class ViewHolder(private val binding: ImageListBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: ImageListBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(imageModel: ImageModel) {
             with(binding) {
-              Glide.with(root.context)
+                Glide.with(root.context)
                     .asBitmap()
                     .load(imageModel.urls.small)
                     .into(imageView)
             }
 
             itemView.setOnClickListener {
-                itemClickListener.onClick(adapterPosition,imageModel,binding.imageView)
+                itemClickListener.onClick(adapterPosition, imageModel, binding.imageView)
             }
         }
     }

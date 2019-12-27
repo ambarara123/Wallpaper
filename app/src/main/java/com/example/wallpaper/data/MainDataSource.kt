@@ -1,14 +1,15 @@
 package com.example.wallpaper.data
 
 import androidx.paging.ItemKeyedDataSource
-import com.example.wallpaper.network.NetworkService
 import com.example.wallpaper.model.ImageModel
+import com.example.wallpaper.network.NetworkService
 import com.example.wallpaper.utils.API_KEY
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MainDataSource(private val networkService: NetworkService) : ItemKeyedDataSource<Int, ImageModel>() {
+class MainDataSource(private val networkService: NetworkService) :
+    ItemKeyedDataSource<Int, ImageModel>() {
 
     private var page = 1
     private val networkScope = CoroutineScope(Dispatchers.IO)

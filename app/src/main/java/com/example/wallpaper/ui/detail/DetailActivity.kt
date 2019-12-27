@@ -1,9 +1,14 @@
 package com.example.wallpaper.ui.detail
 
+import android.app.DownloadManager
 import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -14,12 +19,6 @@ import com.example.wallpaper.databinding.ActivityDetailBinding
 import com.example.wallpaper.model.ImageModel
 import com.example.wallpaper.ui.base.BaseActivity
 import com.example.wallpaper.utils.*
-import android.content.Intent
-import android.app.DownloadManager
-import android.content.Context
-import android.content.IntentFilter
-import androidx.lifecycle.Observer
-
 
 class DetailActivity : BaseActivity<ActivityDetailBinding, DetailViewModel>() {
 
@@ -55,15 +54,19 @@ class DetailActivity : BaseActivity<ActivityDetailBinding, DetailViewModel>() {
             }
 
             setWallpaperBtn.setOnClickListener {
-                val imageName = getImageName()
-                val downloadUrl = getDownloadURL()
-
-                requireNotNull(imageName)
-                requireNotNull(downloadUrl)
-
-                viewModel.setWallpaper(downloadUrl, imageName, "png")
+                setWallpaper()
             }
         }
+    }
+
+    private fun setWallpaper() {
+        val imageName = getImageName()
+        val downloadUrl = getDownloadURL()
+
+        requireNotNull(imageName)
+        requireNotNull(downloadUrl)
+
+        viewModel.setWallpaper(downloadUrl, imageName, ImageType.PNG)
     }
 
     private fun addObserver() {
@@ -79,17 +82,29 @@ class DetailActivity : BaseActivity<ActivityDetailBinding, DetailViewModel>() {
         requireNotNull(imageName)
         requireNotNull(downloadUrl)
 
-        val broadcastReceiver = object : BroadcastReceiver() {
+        val broadcastReceiver = getBroadcastReceiver(id, downloadUrl, imageName)
+        registerBroadcastReceiver(broadcastReceiver)
+    }
+
+    private fun getBroadcastReceiver(
+        id: Long,
+        downloadUrl: String,
+        imageName: String
+    ): BroadcastReceiver {
+        return object : BroadcastReceiver() {
             override fun onReceive(ctxt: Context, intent: Intent) {
                 val receivedId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
                 if (receivedId == id) {
-                    Toast.makeText(this@DetailActivity, "IMAGE DOWNLOADED", Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        this@DetailActivity,
+                        getString(R.string.image_downloaded),
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
-                    viewModel.setWallpaper(downloadUrl, imageName, "png")
+                    viewModel.setWallpaper(downloadUrl, imageName, ImageType.PNG)
                 }
             }
         }
-        registerBroadcastReceiver(broadcastReceiver)
     }
 
     private fun registerBroadcastReceiver(broadcastReceiver: BroadcastReceiver) {
@@ -103,8 +118,8 @@ class DetailActivity : BaseActivity<ActivityDetailBinding, DetailViewModel>() {
         requireNotNull(url)
         requireNotNull(imageName)
 
-        if (viewModel.checkIfFileExists(imageName, "png")) {
-            Toast.makeText(this, "ALREADY DOWNLOADED", Toast.LENGTH_SHORT).show()
+        if (checkIfFileExists(imageName, ImageType.PNG)) {
+            Toast.makeText(this, getString(R.string.already_downloaded), Toast.LENGTH_SHORT).show()
             return
         }
 
