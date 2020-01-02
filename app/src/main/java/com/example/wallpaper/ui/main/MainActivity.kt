@@ -8,17 +8,12 @@ import androidx.lifecycle.Observer
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.wallpaper.R
 import com.example.wallpaper.databinding.ActivityMainBinding
-import com.example.wallpaper.model.ImageModel
+import com.example.wallpaper.network.model.ImageModel
 import com.example.wallpaper.ui.base.BaseActivity
 import com.example.wallpaper.ui.detail.DetailActivity
 import com.example.wallpaper.utils.KEY_INTENT_BUNDLE
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(),
     MainRecyclerAdapter.ItemClickListener {
@@ -31,24 +26,22 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(),
         super.onCreate(savedInstanceState)
 
         initRecyclerView()
-        viewModel.getData()
         addObservers()
+        viewModel.getData()
     }
 
     private fun initRecyclerView() {
-        with(binding) {
-            imageRecyclerView.layoutManager =
+        with(binding.imageRecyclerView) {
+            layoutManager =
                 GridLayoutManager(this@MainActivity,2)
-            imageRecyclerView.adapter = MainRecyclerAdapter(this@MainActivity)
-            imageRecyclerView.itemAnimator = DefaultItemAnimator()
+            adapter = MainRecyclerAdapter(this@MainActivity)
+            itemAnimator = DefaultItemAnimator()
         }
     }
 
     private fun updateAdapter(list: PagedList<ImageModel>) {
         val adapter = binding.imageRecyclerView.adapter
-        if (adapter is MainRecyclerAdapter) {
-            adapter.submitList(list)
-        }
+        (adapter as? MainRecyclerAdapter)?.submitList(list)
     }
 
     private fun addObservers() {
@@ -67,9 +60,6 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(),
         )
         intent.putExtra(KEY_INTENT_BUNDLE, intentData)
         startActivity(intent, options.toBundle())
-        CoroutineScope(Dispatchers.Default).launch {
-
-        }
     }
 }
 

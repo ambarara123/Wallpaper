@@ -1,4 +1,4 @@
-package com.example.wallpaper.model
+package com.example.wallpaper.network.model
 
 data class ProfileImage(
     val large: String,

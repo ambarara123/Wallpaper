@@ -3,9 +3,9 @@ package com.example.wallpaper.di.module
 import android.app.WallpaperManager
 import android.content.Context
 import com.example.wallpaper.MyApplication
+import com.example.wallpaper.network.ApiKeyInterceptor
 import com.example.wallpaper.network.NetworkService
 import com.example.wallpaper.utils.BASE_URL
-import com.example.wallpaper.utils.DownloadMangerUtil
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -25,10 +25,13 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun providesOkhttp(): OkHttpClient {
-        return OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }).build()
+    fun providesOkHttp(): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            })
+            .addInterceptor(ApiKeyInterceptor())
+            .build()
     }
 
     @Provides
@@ -52,7 +55,7 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideGsonConvertorFactory(): GsonConverterFactory {
+    fun provideGsonConverterFactory(): GsonConverterFactory {
         return GsonConverterFactory.create()
     }
 
@@ -61,11 +64,5 @@ class AppModule {
     fun provideWallpaperManager(context: Context): WallpaperManager {
         return WallpaperManager.getInstance(context)
     }
-
-   /* @Provides
-    @Singleton
-    fun provideDownloadManagerUtil(context: Context): DownloadMangerUtil {
-        return DownloadMangerUtil(context)
-    }*/
 
 }

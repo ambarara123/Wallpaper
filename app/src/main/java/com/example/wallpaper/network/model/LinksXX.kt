@@ -1,6 +1,6 @@
-package com.example.wallpaper.model
+package com.example.wallpaper.network.model
 
-data class LinksX(
+data class LinksXX(
     val followers: String,
     val following: String,
     val html: String,

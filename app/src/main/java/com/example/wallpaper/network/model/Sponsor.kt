@@ -1,17 +1,17 @@
-package com.example.wallpaper.model
+package com.example.wallpaper.network.model
 
-data class User(
+data class Sponsor(
     val accepted_tos: Boolean,
     val bio: String,
     val first_name: String,
     val id: String,
     val instagram_username: String,
     val last_name: String,
-    val links: LinksXX,
-    val location: String,
+    val links: LinksX,
+    val location: Any,
     val name: String,
-    val portfolio_url: Any,
-    val profile_image: ProfileImageX,
+    val portfolio_url: String,
+    val profile_image: ProfileImage,
     val total_collections: Int,
     val total_likes: Int,
     val total_photos: Int,

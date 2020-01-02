@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.Observer
@@ -16,7 +17,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.wallpaper.R
 import com.example.wallpaper.databinding.ActivityDetailBinding
-import com.example.wallpaper.model.ImageModel
+import com.example.wallpaper.network.model.ImageModel
 import com.example.wallpaper.ui.base.BaseActivity
 import com.example.wallpaper.utils.*
 
@@ -40,8 +41,8 @@ class DetailActivity : BaseActivity<ActivityDetailBinding, DetailViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        supportPostponeEnterTransition()
 
+        supportPostponeEnterTransition()
         transitionImageSetup()
         addListeners()
         addObserver()
@@ -99,8 +100,7 @@ class DetailActivity : BaseActivity<ActivityDetailBinding, DetailViewModel>() {
                         this@DetailActivity,
                         getString(R.string.image_downloaded),
                         Toast.LENGTH_SHORT
-                    )
-                        .show()
+                    ).show()
                     viewModel.setWallpaper(downloadUrl, imageName, ImageType.PNG)
                 }
             }
@@ -163,7 +163,6 @@ class DetailActivity : BaseActivity<ActivityDetailBinding, DetailViewModel>() {
         bundle?.getString(KEY_IMAGE_DESCRIPTION).let {
             binding.detailTextView.text = it
         }
-
     }
 
     private fun getImageName() = getBundle()?.getString(KEY_IMAGE_NAME)
@@ -173,7 +172,7 @@ class DetailActivity : BaseActivity<ActivityDetailBinding, DetailViewModel>() {
     private fun getBundle() = intent.getBundleExtra(KEY_INTENT_BUNDLE)
 
     override fun onBackPressed() {
-        // super.onBackPressed()
         supportFinishAfterTransition()
     }
+
 }

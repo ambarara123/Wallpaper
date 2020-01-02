@@ -1,9 +1,8 @@
 package com.example.wallpaper.data
 
 import androidx.paging.ItemKeyedDataSource
-import com.example.wallpaper.model.ImageModel
+import com.example.wallpaper.network.model.ImageModel
 import com.example.wallpaper.network.NetworkService
-import com.example.wallpaper.utils.API_KEY
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,20 +19,19 @@ class MainDataSource(private val networkService: NetworkService) :
     ) {
         val key = params.requestedInitialKey ?: 1
         networkScope.launch {
-            val result = networkService.getRandomImages(API_KEY, key, 10)
+            val result = networkService.getRandomImages(key, 10)
             callback.onResult(result)
         }
     }
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<ImageModel>) {
         networkScope.launch {
-            val result = networkService.getRandomImages(API_KEY, params.key, 10)
+            val result = networkService.getRandomImages(params.key, 10)
             callback.onResult(result)
         }
     }
 
     override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<ImageModel>) {
-
     }
 
     override fun getKey(item: ImageModel): Int {

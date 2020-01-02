@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.paging.PagedList
 import com.example.wallpaper.data.MainRepository
-import com.example.wallpaper.model.ImageModel
+import com.example.wallpaper.network.model.ImageModel
 import com.example.wallpaper.ui.base.BaseViewModel
 
 import javax.inject.Inject

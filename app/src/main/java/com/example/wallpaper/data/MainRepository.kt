@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
-import com.example.wallpaper.model.ImageModel
+import com.example.wallpaper.network.model.ImageModel
 import com.example.wallpaper.network.NetworkService
 import javax.inject.Inject
 

@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.wallpaper.databinding.ImageListBinding
-import com.example.wallpaper.model.ImageModel
+import com.example.wallpaper.network.model.ImageModel
 
 class MainRecyclerAdapter(private val itemClickListener: ItemClickListener) :
     PagedListAdapter<ImageModel, MainRecyclerAdapter.ViewHolder>(diffCallback) {
@@ -49,7 +49,7 @@ class MainRecyclerAdapter(private val itemClickListener: ItemClickListener) :
     }
 
     companion object {
-        val diffCallback = object : DiffUtil.ItemCallback<ImageModel>() {
+        private val diffCallback = object : DiffUtil.ItemCallback<ImageModel>() {
             override fun areItemsTheSame(oldItem: ImageModel, newItem: ImageModel): Boolean {
                 return oldItem.id == newItem.id
             }
