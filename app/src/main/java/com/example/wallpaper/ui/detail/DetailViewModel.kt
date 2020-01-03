@@ -6,7 +6,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.wallpaper.ui.base.BaseViewModel
-import com.example.wallpaper.utils.*
+import com.example.wallpaper.utils.DownloadMangerUtil
+import com.example.wallpaper.utils.ImageType
+import com.example.wallpaper.utils.checkIfFileExists
+import com.example.wallpaper.utils.getPath
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -19,8 +22,17 @@ class DetailViewModel @Inject constructor(
 
     private val _liveDownloadID = MutableLiveData<Long>()
 
+    private val _isImageDownloaded = MutableLiveData<Boolean>()
+
     val liveDownloadID: LiveData<Long>
         get() = _liveDownloadID
+
+    val isImageDownloaded: LiveData<Boolean>
+        get() = _isImageDownloaded
+
+    fun checkIfImageDownloaded(imageName: String,imageType: ImageType){
+       _isImageDownloaded.value = checkIfFileExists(imageName, imageType)
+    }
 
     fun downloadWallpaper(downloadUrl: String, imageName: String): Long {
         return downloadMangerUtil.downloadImage(downloadUrl, imageName)
@@ -57,7 +69,5 @@ class DetailViewModel @Inject constructor(
             }
         }
     }
-
-
 
 }

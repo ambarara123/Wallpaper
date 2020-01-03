@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.Observer
@@ -46,16 +45,25 @@ class DetailActivity : BaseActivity<ActivityDetailBinding, DetailViewModel>() {
         transitionImageSetup()
         addListeners()
         addObserver()
+        checkImageStatus()
+    }
+
+    private fun checkImageStatus() {
+        val imageName = getImageName()
+        requireNotNull(imageName)
+        viewModel.checkIfImageDownloaded(imageName, ImageType.PNG)
     }
 
     private fun addListeners() {
         with(binding) {
             downloadBtn.setOnClickListener {
                 downloadFile()
+                //downloadBtn.isEnabled = false
             }
 
             setWallpaperBtn.setOnClickListener {
                 setWallpaper()
+                setWallpaperBtn.isEnabled = false
             }
         }
     }
@@ -71,8 +79,13 @@ class DetailActivity : BaseActivity<ActivityDetailBinding, DetailViewModel>() {
     }
 
     private fun addObserver() {
-        viewModel.liveDownloadID.observe(this@DetailActivity, Observer {
+        viewModel.liveDownloadID.observe(this, Observer {
             setBroadcastReceiver(it)
+        })
+
+        viewModel.isImageDownloaded.observe(this, Observer {
+            if (it)
+            binding.downloadBtn.isEnabled = false
         })
     }
 
@@ -101,6 +114,9 @@ class DetailActivity : BaseActivity<ActivityDetailBinding, DetailViewModel>() {
                         getString(R.string.image_downloaded),
                         Toast.LENGTH_SHORT
                     ).show()
+
+                    binding.downloadBtn.isEnabled = false
+
                     viewModel.setWallpaper(downloadUrl, imageName, ImageType.PNG)
                 }
             }
@@ -174,5 +190,11 @@ class DetailActivity : BaseActivity<ActivityDetailBinding, DetailViewModel>() {
     override fun onBackPressed() {
         supportFinishAfterTransition()
     }
+
+    /*override fun onStart() {
+        super.onStart()
+        if (checkIfFileExists(getImageName()!!, ImageType.PNG))
+            binding.downloadBtn.isEnabled = false
+    }*/
 
 }

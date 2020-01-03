@@ -1,8 +1,8 @@
 package com.example.wallpaper.data
 
 import androidx.paging.ItemKeyedDataSource
-import com.example.wallpaper.network.model.ImageModel
 import com.example.wallpaper.network.NetworkService
+import com.example.wallpaper.network.model.ImageModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -2,8 +2,8 @@ package com.example.wallpaper.data
 
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.DataSource
-import com.example.wallpaper.network.model.ImageModel
 import com.example.wallpaper.network.NetworkService
+import com.example.wallpaper.network.model.ImageModel
 
 
 class MainDataSourceFactory(private val networkService: NetworkService) :

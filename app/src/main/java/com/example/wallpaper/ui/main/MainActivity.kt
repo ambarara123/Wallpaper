@@ -33,7 +33,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(),
     private fun initRecyclerView() {
         with(binding.imageRecyclerView) {
             layoutManager =
-                GridLayoutManager(this@MainActivity,2)
+                GridLayoutManager(this@MainActivity, 2)
             adapter = MainRecyclerAdapter(this@MainActivity)
             itemAnimator = DefaultItemAnimator()
         }
