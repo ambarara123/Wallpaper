@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.wallpaper.R
 import com.example.wallpaper.databinding.ActivityMainBinding
 import com.example.wallpaper.network.model.ImageModel
@@ -33,7 +34,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(),
     private fun initRecyclerView() {
         with(binding.imageRecyclerView) {
             layoutManager =
-                GridLayoutManager(this@MainActivity, 2)
+                GridLayoutManager(this@MainActivity,2)
             adapter = MainRecyclerAdapter(this@MainActivity)
             itemAnimator = DefaultItemAnimator()
         }

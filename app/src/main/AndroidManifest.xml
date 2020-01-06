@@ -4,7 +4,6 @@
     package="com.example.wallpaper">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
 
     <application
@@ -16,16 +15,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.detail.DetailActivity"
-            android:parentActivityName=".ui.main.MainActivity"
+        <activity android:name=".ui.rx.TestRX"></activity>
+        <activity
+            android:name=".ui.detail.DetailActivity"
             android:launchMode="singleTask"
+            android:parentActivityName=".ui.main.MainActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
             tools:targetApi="jelly_bean">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.main.MainActivity"
-                />
-
+                android:value=".ui.main.MainActivity" />
         </activity>
         <activity android:name=".ui.main.MainActivity">
             <intent-filter>

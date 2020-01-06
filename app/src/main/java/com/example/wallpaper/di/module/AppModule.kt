@@ -6,6 +6,7 @@ import com.example.wallpaper.MyApplication
 import com.example.wallpaper.network.ApiKeyInterceptor
 import com.example.wallpaper.network.NetworkService
 import com.example.wallpaper.utils.BASE_URL
+import com.example.wallpaper.utils.DownloadMangerUtil
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -21,6 +22,12 @@ class AppModule {
     @Singleton
     fun provideContext(application: MyApplication): Context {
         return application
+    }
+
+    @Provides
+    @Singleton
+    fun provideDownloadManagerUtlis(context: Context): DownloadMangerUtil{
+        return DownloadMangerUtil(context)
     }
 
     @Provides

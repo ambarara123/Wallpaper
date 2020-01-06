@@ -3,6 +3,8 @@ package com.example.wallpaper.utils
 import android.app.DownloadManager
 import android.content.Context
 import android.net.Uri
+import android.os.Build
+import androidx.annotation.RequiresApi
 import java.io.File
 import javax.inject.Inject
 
@@ -22,6 +24,7 @@ class DownloadMangerUtil @Inject constructor(val context: Context) {
         return downloadManager.enqueue(request)
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun createDownloadRequest(
         url: String,
         file: File

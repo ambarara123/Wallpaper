@@ -1,18 +1,24 @@
 package com.example.wallpaper.ui.detail
 
+import android.annotation.SuppressLint
 import android.app.WallpaperManager
 import android.graphics.BitmapFactory
+import android.os.Bundle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.wallpaper.ui.base.BaseViewModel
-import com.example.wallpaper.utils.DownloadMangerUtil
-import com.example.wallpaper.utils.ImageType
-import com.example.wallpaper.utils.checkIfFileExists
-import com.example.wallpaper.utils.getPath
+import com.example.wallpaper.utils.*
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
+import java.security.Timestamp
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class DetailViewModel @Inject constructor(
@@ -24,11 +30,27 @@ class DetailViewModel @Inject constructor(
 
     private val _isImageDownloaded = MutableLiveData<Boolean>()
 
+    private lateinit var disposable : Disposable
+
+    lateinit var imageName: String
+    lateinit var imageUrl: String
+
     val liveDownloadID: LiveData<Long>
         get() = _liveDownloadID
 
     val isImageDownloaded: LiveData<Boolean>
         get() = _isImageDownloaded
+
+    fun init(bundle: Bundle) {
+        val imageName = bundle.getString(KEY_IMAGE_NAME)
+        val imageUrl = bundle.getString(KEY_IMAGE_URL_LARGE)
+
+        requireNotNull(imageName)
+        requireNotNull(imageUrl)
+
+        this.imageName = imageName
+        this.imageUrl = imageUrl
+    }
 
     fun checkIfImageDownloaded(imageName: String,imageType: ImageType){
        _isImageDownloaded.value = checkIfFileExists(imageName, imageType)
@@ -40,11 +62,11 @@ class DetailViewModel @Inject constructor(
 
     fun setWallpaper(downloadUrl: String, imageName: String, imageType: ImageType) {
         viewModelScope.launch {
-            setWallpaperBackground(downloadUrl, imageName, imageType)
+            setWallpaperInBackground(downloadUrl, imageName, imageType)
         }
     }
 
-    private suspend fun setWallpaperBackground(
+    private suspend fun setWallpaperInBackground(
         downloadUrl: String,
         imageName: String,
         imageType: ImageType
@@ -68,6 +90,27 @@ class DetailViewModel @Inject constructor(
                 e.printStackTrace()
             }
         }
+    }
+
+    @SuppressLint("CheckResult")
+    fun checkButtonClick(observable: Observable<Any>){
+            observable.debounce(3,TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    disposable = it
+                }
+                .subscribe ({
+                    downloadWallpaper(imageUrl, imageName)
+                    Timber.d("RxClickListener called!!")
+                },{
+                    it.printStackTrace()
+                })
+
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        disposable.dispose()
     }
 
 }

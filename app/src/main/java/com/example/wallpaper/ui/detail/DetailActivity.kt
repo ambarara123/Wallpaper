@@ -19,6 +19,10 @@ import com.example.wallpaper.databinding.ActivityDetailBinding
 import com.example.wallpaper.network.model.ImageModel
 import com.example.wallpaper.ui.base.BaseActivity
 import com.example.wallpaper.utils.*
+import com.jakewharton.rxbinding2.view.RxView
+import io.reactivex.android.schedulers.AndroidSchedulers
+import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 class DetailActivity : BaseActivity<ActivityDetailBinding, DetailViewModel>() {
 
@@ -41,6 +45,7 @@ class DetailActivity : BaseActivity<ActivityDetailBinding, DetailViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        getBundle()?.let { viewModel.init(it) }
         supportPostponeEnterTransition()
         transitionImageSetup()
         addListeners()
@@ -55,10 +60,15 @@ class DetailActivity : BaseActivity<ActivityDetailBinding, DetailViewModel>() {
     }
 
     private fun addListeners() {
+        viewModel.checkButtonClick(RxView.clicks(binding.downloadBtn))
+        viewModel.checkButtonClick(RxView.clicks(binding.debounceBtn))
+
+        binding.debounceBtn.setOnClickListener { Timber.d("Native click listener called!") }
+
         with(binding) {
+
             downloadBtn.setOnClickListener {
                 downloadFile()
-                //downloadBtn.isEnabled = false
             }
 
             setWallpaperBtn.setOnClickListener {
@@ -85,7 +95,7 @@ class DetailActivity : BaseActivity<ActivityDetailBinding, DetailViewModel>() {
 
         viewModel.isImageDownloaded.observe(this, Observer {
             if (it)
-            binding.downloadBtn.isEnabled = false
+                binding.downloadBtn.isEnabled = false
         })
     }
 
@@ -190,11 +200,5 @@ class DetailActivity : BaseActivity<ActivityDetailBinding, DetailViewModel>() {
     override fun onBackPressed() {
         supportFinishAfterTransition()
     }
-
-    /*override fun onStart() {
-        super.onStart()
-        if (checkIfFileExists(getImageName()!!, ImageType.PNG))
-            binding.downloadBtn.isEnabled = false
-    }*/
 
 }
