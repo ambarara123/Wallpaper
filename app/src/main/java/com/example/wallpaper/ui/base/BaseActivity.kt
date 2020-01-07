@@ -1,6 +1,7 @@
 package com.example.wallpaper.ui.base
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -34,5 +35,11 @@ abstract class BaseActivity<B : ViewDataBinding, VM : ViewModel> : DaggerAppComp
     @LayoutRes
     abstract fun getLayoutId(): Int
 
-
+    fun showToast(messageResId: Int) {
+        Toast.makeText(
+            this,
+            getString(messageResId),
+            Toast.LENGTH_SHORT
+        ).show()
+    }
 }

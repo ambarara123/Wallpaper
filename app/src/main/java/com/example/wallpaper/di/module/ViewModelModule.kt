@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.wallpaper.di.key.ViewModelKey
 import com.example.wallpaper.ui.detail.DetailViewModel
 import com.example.wallpaper.ui.main.MainViewModel
+import com.example.wallpaper.ui.rx.RxViewModel
 import com.example.wallpaper.utils.ViewModelFactory
 import dagger.Binds
 import dagger.Module
@@ -25,5 +26,10 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(DetailViewModel::class)
     abstract fun bindDetailViewModel(viewModel: DetailViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(RxViewModel::class)
+    abstract fun bindTestRxViewModel(viewModel : RxViewModel): ViewModel
 
 }

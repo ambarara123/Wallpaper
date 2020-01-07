@@ -2,6 +2,8 @@ package com.example.wallpaper.ui.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.ImageView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.Observer
@@ -14,6 +16,7 @@ import com.example.wallpaper.databinding.ActivityMainBinding
 import com.example.wallpaper.network.model.ImageModel
 import com.example.wallpaper.ui.base.BaseActivity
 import com.example.wallpaper.ui.detail.DetailActivity
+import com.example.wallpaper.ui.rx.TestRXActivity
 import com.example.wallpaper.utils.KEY_INTENT_BUNDLE
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(),
@@ -61,6 +64,18 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(),
         )
         intent.putExtra(KEY_INTENT_BUNDLE, intentData)
         startActivity(intent, options.toBundle())
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu,menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.actionRxActivity){
+            startActivity(Intent(this, TestRXActivity::class.java))
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
 

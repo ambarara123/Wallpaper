@@ -4,4 +4,6 @@
     <string name="image_downloaded">IMAGE DOWNLOADED</string>
     <string name="png">png</string>
     <string name="already_downloaded">ALREADY DOWNLOADED</string>
+    <string name="test_debounce">test debounce</string>
+    <string name="message_form_valid">Form is Valid!</string>
 </resources>

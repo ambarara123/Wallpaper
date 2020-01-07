@@ -21,7 +21,4 @@ class MainViewModel @Inject constructor(private val mainRepository: MainReposito
     fun getData() {
         mainRepository.fetchData()
     }
-
-    var compositeDisposable = CompositeDisposable()
-
 }
