@@ -5,13 +5,13 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
-import androidx.core.text.clearSpans
 import androidx.lifecycle.Observer
 import com.example.wallpaper.R
 import com.example.wallpaper.databinding.ActivityTestRxBinding
 import com.example.wallpaper.exceptions.InvalidNameException
 import com.example.wallpaper.exceptions.InvalidPasswordException
 import com.example.wallpaper.ui.base.BaseActivity
+import com.example.wallpaper.utils.StringValidation
 import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -33,7 +33,6 @@ class TestRXActivity : BaseActivity<ActivityTestRxBinding, RxViewModel>() {
         addListeners()
         formValidation()
     }
-
 
     private fun addListeners() {
         with(binding) {
@@ -73,21 +72,13 @@ class TestRXActivity : BaseActivity<ActivityTestRxBinding, RxViewModel>() {
                         second is InvalidPasswordException -> binding.passwordEditText.error =
                             second?.message
 
-                        first == 4 -> {
+                        first.containsSymbols && first.containsNumber && first.containsUpperCase -> {
+                            updateSpannableTextAppearance(spannable,first)
                             showToast(R.string.message_form_valid)
-                            binding.passwordEditText.error = null
-                            binding.usernameEditText.error = null
-                            uppercaseSpan(spannable)
-                            numberSpan(spannable)
-                            symbolSpan(spannable)
                         }
-                        first == 1 -> uppercaseSpan(spannable)
 
-                        first == 2 -> numberSpan(spannable)
+                        else -> updateSpannableTextAppearance(spannable,first)
 
-                        first == 3 -> symbolSpan(spannable)
-
-                        first == 0 -> spannable.clearSpans()
                     }
                 }
                 binding.spannableTextView.text = spannable
@@ -96,27 +87,44 @@ class TestRXActivity : BaseActivity<ActivityTestRxBinding, RxViewModel>() {
         disposable.addAll(isValid)
     }
 
-    private fun uppercaseSpan(spannable: SpannableString) {
+    private fun updateSpannableTextAppearance(spannable: SpannableString, stringValidation: StringValidation) {
+        uppercaseSpan(spannable, stringValidation.containsUpperCase)
+        numberSpan(spannable,stringValidation.containsNumber)
+        symbolSpan(spannable,stringValidation.containsSymbols)
+    }
+
+    private fun uppercaseSpan(spannable: SpannableString, isColored: Boolean) {
+        val color = when {
+            isColored -> Color.GREEN
+            else -> Color.GRAY
+        }
         spannable.setSpan(
-            ForegroundColorSpan(Color.GREEN),
+            ForegroundColorSpan(color),
             14, 24,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
 
     }
 
-    private fun numberSpan(spannable: SpannableString) {
+    private fun numberSpan(spannable: SpannableString, isColored: Boolean) {
+        val color = when {
+            isColored -> Color.GREEN
+            else -> Color.GRAY
+        }
         spannable.setSpan(
-            ForegroundColorSpan(Color.GREEN),
+            ForegroundColorSpan(color),
             25, 31,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
-        spannable.clearSpans()
     }
 
-    private fun symbolSpan(spannable: SpannableString) {
+    private fun symbolSpan(spannable: SpannableString, isColored: Boolean) {
+        val color = when {
+            isColored -> Color.GREEN
+            else -> Color.GRAY
+        }
         spannable.setSpan(
-            ForegroundColorSpan(Color.GREEN),
+            ForegroundColorSpan(color),
             32, 39,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
