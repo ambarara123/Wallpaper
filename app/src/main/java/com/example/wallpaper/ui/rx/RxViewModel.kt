@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.wallpaper.exceptions.InvalidNameException
 import com.example.wallpaper.exceptions.InvalidPasswordException
 import com.example.wallpaper.ui.base.BaseViewModel
+import com.example.wallpaper.utils.checkString
 import com.jakewharton.rxbinding2.widget.TextViewTextChangeEvent
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -14,6 +15,7 @@ import io.reactivex.functions.BiFunction
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+
 
 @SuppressLint("CheckResult")
 class RxViewModel @Inject constructor(
@@ -68,21 +70,26 @@ class RxViewModel @Inject constructor(
     fun formValidation(
         userNameObservable: Observable<String>,
         passwordObservable: Observable<String>
-    ): Observable<Pair<Boolean, Exception?>> {
+    ): Observable<Pair<Int, Exception?>> {
         return Observable.combineLatest(
             userNameObservable,
             passwordObservable,
-            BiFunction<String, String, Pair<Boolean, Exception?>> { name, password ->
+            BiFunction<String, String, Pair<Int, Exception?>> { name, password ->
                 Timber.d(isValidForm(name, password).toString())
                 isValidForm(name, password)
             })
     }
 
-    private fun isValidForm(name: String, password: String): Pair<Boolean, Exception?> {
+    private fun isValidForm(name: String, password: String): Pair<Int, Exception?> {
+        val checkString = checkString(password)
         return when {
-            name.isEmpty() -> Pair(false, InvalidNameException())
-            password.isEmpty() -> Pair(false, InvalidPasswordException())
-            else -> Pair(true, null)
+            name.isEmpty() -> Pair(0, InvalidNameException())
+            password.isEmpty() -> Pair(0, InvalidPasswordException())
+            checkString.second -> Pair(4, null)
+            checkString.first == 1 -> Pair(1, InvalidPasswordException())
+            checkString.first == 2 -> Pair(2, InvalidPasswordException())
+            checkString.first == 3 -> Pair(3, InvalidPasswordException())
+            else -> Pair(0, null)
         }
     }
 
