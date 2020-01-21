@@ -11,3 +11,9 @@ val networkModule = module {
 
     single { AppModule.provideNetworkService(get()) }
 }
+
+val managerModule = module {
+    single { AppModule.provideDownloadManagerUtils(get()) }
+
+    single { AppModule.provideWallpaperManager(get()) }
+}
