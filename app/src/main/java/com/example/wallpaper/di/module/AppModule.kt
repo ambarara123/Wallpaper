@@ -26,7 +26,7 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideDownloadManagerUtlis(context: Context): DownloadMangerUtil{
+    fun provideDownloadManagerUtils(context: Context): DownloadMangerUtil{
         return DownloadMangerUtil(context)
     }
 

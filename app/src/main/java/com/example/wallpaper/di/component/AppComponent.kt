@@ -4,6 +4,7 @@ import com.example.wallpaper.MyApplication
 import com.example.wallpaper.di.module.ActivityBindingModule
 import com.example.wallpaper.di.module.AppModule
 import com.example.wallpaper.di.module.ViewModelModule
+import com.example.wallpaper.ui.main.MainActivity
 import dagger.Component
 import dagger.android.AndroidInjectionModule
 import dagger.android.AndroidInjector

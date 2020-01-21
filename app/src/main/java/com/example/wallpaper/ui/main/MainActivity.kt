@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.widget.ImageView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.Observer
+import androidx.lifecycle.Transformations
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
@@ -37,7 +38,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(),
     private fun initRecyclerView() {
         with(binding.imageRecyclerView) {
             layoutManager =
-                GridLayoutManager(this@MainActivity,2)
+                StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
             adapter = MainRecyclerAdapter(this@MainActivity)
             itemAnimator = DefaultItemAnimator()
         }
@@ -78,4 +79,3 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(),
         return super.onOptionsItemSelected(item)
     }
 }
-

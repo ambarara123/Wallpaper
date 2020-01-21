@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
@@ -20,7 +21,9 @@ import com.example.wallpaper.network.model.ImageModel
 import com.example.wallpaper.ui.base.BaseActivity
 import com.example.wallpaper.utils.*
 import com.jakewharton.rxbinding2.view.RxView
+import io.reactivex.Observable
 import timber.log.Timber
+import java.util.*
 
 class DetailActivity : BaseActivity<ActivityDetailBinding, DetailViewModel>() {
 
@@ -104,8 +107,9 @@ class DetailActivity : BaseActivity<ActivityDetailBinding, DetailViewModel>() {
         requireNotNull(imageName)
         requireNotNull(downloadUrl)
 
-        val broadcastReceiver = getBroadcastReceiver(id, downloadUrl, imageName)
-        registerBroadcastReceiver(broadcastReceiver)
+        getBroadcastReceiver(id, downloadUrl, imageName).also {
+            registerBroadcastReceiver(it)
+        }
     }
 
     private fun getBroadcastReceiver(
@@ -124,7 +128,6 @@ class DetailActivity : BaseActivity<ActivityDetailBinding, DetailViewModel>() {
                     ).show()
 
                     binding.downloadBtn.isEnabled = false
-
                     viewModel.setWallpaper(downloadUrl, imageName, ImageType.PNG)
                 }
             }

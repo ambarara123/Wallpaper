@@ -32,7 +32,7 @@ class DetailViewModel @Inject constructor(
 
     private lateinit var disposable : Disposable
 
-    lateinit var imageName: String
+    private lateinit var imageName: String
     lateinit var imageUrl: String
 
     val liveDownloadID: LiveData<Long>
@@ -105,7 +105,6 @@ class DetailViewModel @Inject constructor(
                 },{
                     it.printStackTrace()
                 })
-
     }
 
     override fun onCleared() {

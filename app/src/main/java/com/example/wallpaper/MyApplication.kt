@@ -13,10 +13,6 @@ class MyApplication : DaggerApplication() {
 
     override fun onCreate() {
         super.onCreate()
-        plantTimber()
-    }
-
-    private fun plantTimber() {
         Timber.plant(Timber.DebugTree())
     }
 }

@@ -13,7 +13,11 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.lang.StringBuilder
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -86,11 +90,6 @@ class RxViewModel @Inject constructor(
         return when {
             name.isEmpty() -> Pair(checkString, InvalidNameException())
             password.isEmpty() -> Pair(checkString, InvalidPasswordException())
-
-            /*checkString.second -> Pair(4, null)
-            checkString.first == 1 -> Pair(1, InvalidPasswordException())
-            checkString.first == 2 -> Pair(2, InvalidPasswordException())
-            checkString.first == 3 -> Pair(3, InvalidPasswordException())*/
             else -> Pair(checkString, null)
         }
     }
@@ -115,5 +114,4 @@ class RxViewModel @Inject constructor(
         if (!disposable.isDisposed)
             disposable.dispose()
     }
-
 }
