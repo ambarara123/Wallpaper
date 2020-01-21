@@ -13,17 +13,12 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.lang.StringBuilder
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 
 @SuppressLint("CheckResult")
-class RxViewModel @Inject constructor(
+class RxViewModel constructor(
 ) : BaseViewModel() {
 
     private val _textLiveData = MutableLiveData<String>()

@@ -6,9 +6,8 @@ import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.example.wallpaper.network.NetworkService
 import com.example.wallpaper.network.model.ImageModel
-import javax.inject.Inject
 
-class MainRepository @Inject constructor(networkService: NetworkService) {
+class MainRepository constructor(networkService: NetworkService) {
 
     private val pageSize = 10
 
