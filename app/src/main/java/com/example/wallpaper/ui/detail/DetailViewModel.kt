@@ -18,7 +18,7 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-class DetailViewModel constructor(
+class DetailViewModel(
     private val wallpaperManager: WallpaperManager,
     private val downloadMangerUtil: DownloadMangerUtil
 ) : BaseViewModel() {

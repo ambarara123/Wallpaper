@@ -18,8 +18,7 @@ import java.util.concurrent.TimeUnit
 
 
 @SuppressLint("CheckResult")
-class RxViewModel constructor(
-) : BaseViewModel() {
+class RxViewModel : BaseViewModel() {
 
     private val _textLiveData = MutableLiveData<String>()
 

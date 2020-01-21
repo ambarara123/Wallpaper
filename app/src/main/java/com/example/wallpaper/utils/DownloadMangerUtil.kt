@@ -7,7 +7,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import java.io.File
 
-class DownloadMangerUtil  constructor(val context: Context) {
+class DownloadMangerUtil(val context: Context) {
 
     private val downloadManager: DownloadManager by lazy {
         context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager

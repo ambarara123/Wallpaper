@@ -10,9 +10,8 @@ import androidx.lifecycle.ViewModel
 import com.example.wallpaper.BR
 
 abstract class BaseActivity<B : ViewDataBinding, VM : ViewModel> : AppCompatActivity() {
-    lateinit var viewModel: VM
+    abstract val viewModel: VM
     lateinit var binding: B
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,8 +24,6 @@ abstract class BaseActivity<B : ViewDataBinding, VM : ViewModel> : AppCompatActi
         binding = DataBindingUtil.setContentView(this, layoutId)
         binding.setVariable(BR.viewModel, viewModel)
     }
-
-    abstract fun getViewModelClass(): Class<VM>
 
     @LayoutRes
     abstract fun getLayoutId(): Int

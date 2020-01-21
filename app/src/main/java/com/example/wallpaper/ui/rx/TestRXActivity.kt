@@ -19,11 +19,11 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 class TestRXActivity : BaseActivity<ActivityTestRxBinding, RxViewModel>() {
-
-    override fun getViewModelClass(): Class<RxViewModel> = RxViewModel::class.java
+    override val viewModel: RxViewModel by viewModel()
 
     override fun getLayoutId(): Int = R.layout.activity_test_rx
 
