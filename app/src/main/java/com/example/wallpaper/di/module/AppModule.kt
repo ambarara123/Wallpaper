@@ -2,7 +2,6 @@ package com.example.wallpaper.di.module
 
 import android.app.WallpaperManager
 import android.content.Context
-import com.example.wallpaper.MyApplication
 import com.example.wallpaper.network.ApiKeyInterceptor
 import com.example.wallpaper.network.NetworkService
 import com.example.wallpaper.utils.BASE_URL
@@ -13,11 +12,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class AppModule {
-
-    fun provideContext(application: MyApplication): Context {
-        return application
-    }
+object AppModule {
 
     fun provideDownloadManagerUtils(context: Context): DownloadMangerUtil{
         return DownloadMangerUtil(context)
