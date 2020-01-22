@@ -17,6 +17,8 @@ class MyApplication : Application() {
         super.onCreate()
         startKoin {
             androidContext(this@MyApplication)
+
+            if (BuildConfig.DEBUG)
             androidLogger()
 
             modules(listOf(networkModule, managerModule, viewModelModule, repositoryModule))
