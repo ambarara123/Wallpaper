@@ -6,11 +6,9 @@ import androidx.paging.PagedList
 import com.example.wallpaper.data.MainRepository
 import com.example.wallpaper.network.model.ImageModel
 import com.example.wallpaper.ui.base.BaseViewModel
-import io.reactivex.disposables.CompositeDisposable
 
-import javax.inject.Inject
 
-class MainViewModel @Inject constructor(private val mainRepository: MainRepository) :
+class MainViewModel(private val mainRepository: MainRepository) :
     BaseViewModel() {
 
     val mainLiveData: LiveData<PagedList<ImageModel>> =

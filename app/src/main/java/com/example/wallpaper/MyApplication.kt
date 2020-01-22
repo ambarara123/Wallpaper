@@ -1,22 +1,28 @@
 package com.example.wallpaper
 
-import com.example.wallpaper.di.component.DaggerAppComponent
-import dagger.android.AndroidInjector
-import dagger.android.support.DaggerApplication
+import android.app.Application
+import com.example.wallpaper.di.module.managerModule
+import com.example.wallpaper.di.module.networkModule
+import com.example.wallpaper.di.module.repositoryModule
+import com.example.wallpaper.di.module.viewModelModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.Koin
+import org.koin.core.context.startKoin
 import timber.log.Timber
 
-class MyApplication : DaggerApplication() {
-
-    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        return DaggerAppComponent.factory().create(this)
-    }
+class MyApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        plantTimber()
-    }
+        startKoin {
+            androidContext(this@MyApplication)
 
-    private fun plantTimber() {
+            if (BuildConfig.DEBUG)
+            androidLogger()
+
+            modules(listOf(networkModule, managerModule, viewModelModule, repositoryModule))
+        }
         Timber.plant(Timber.DebugTree())
     }
 }

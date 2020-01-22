@@ -12,16 +12,13 @@ import com.example.wallpaper.utils.*
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.security.Timestamp
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
-class DetailViewModel @Inject constructor(
+class DetailViewModel(
     private val wallpaperManager: WallpaperManager,
     private val downloadMangerUtil: DownloadMangerUtil
 ) : BaseViewModel() {
@@ -30,9 +27,9 @@ class DetailViewModel @Inject constructor(
 
     private val _isImageDownloaded = MutableLiveData<Boolean>()
 
-    private lateinit var disposable : Disposable
+    private lateinit var disposable: Disposable
 
-    lateinit var imageName: String
+    private lateinit var imageName: String
     lateinit var imageUrl: String
 
     val liveDownloadID: LiveData<Long>
@@ -52,8 +49,8 @@ class DetailViewModel @Inject constructor(
         this.imageUrl = imageUrl
     }
 
-    fun checkIfImageDownloaded(imageName: String,imageType: ImageType){
-       _isImageDownloaded.value = checkIfFileExists(imageName, imageType)
+    fun checkIfImageDownloaded(imageName: String, imageType: ImageType) {
+        _isImageDownloaded.value = checkIfFileExists(imageName, imageType)
     }
 
     fun downloadWallpaper(downloadUrl: String, imageName: String): Long {
@@ -93,19 +90,18 @@ class DetailViewModel @Inject constructor(
     }
 
     @SuppressLint("CheckResult")
-    fun checkButtonClick(observable: Observable<Any>){
-            observable.debounce(3,TimeUnit.SECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    disposable = it
-                }
-                .subscribe ({
-                    downloadWallpaper(imageUrl, imageName)
-                    Timber.d("RxClickListener called!!")
-                },{
-                    it.printStackTrace()
-                })
-
+    fun checkButtonClick(observable: Observable<Any>) {
+        observable.debounce(3, TimeUnit.SECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                disposable = it
+            }
+            .subscribe({
+                downloadWallpaper(imageUrl, imageName)
+                Timber.d("RxClickListener called!!")
+            }, {
+                it.printStackTrace()
+            })
     }
 
     override fun onCleared() {

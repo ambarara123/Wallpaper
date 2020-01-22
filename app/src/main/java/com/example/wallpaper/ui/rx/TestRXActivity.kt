@@ -4,7 +4,9 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
+import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.example.wallpaper.R
 import com.example.wallpaper.databinding.ActivityTestRxBinding
@@ -13,14 +15,15 @@ import com.example.wallpaper.exceptions.InvalidPasswordException
 import com.example.wallpaper.ui.base.BaseActivity
 import com.example.wallpaper.utils.StringValidation
 import com.jakewharton.rxbinding2.widget.RxTextView
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 class TestRXActivity : BaseActivity<ActivityTestRxBinding, RxViewModel>() {
-
-    override fun getViewModelClass(): Class<RxViewModel> = RxViewModel::class.java
+    override val viewModel: RxViewModel by viewModel()
 
     override fun getLayoutId(): Int = R.layout.activity_test_rx
 
@@ -28,10 +31,14 @@ class TestRXActivity : BaseActivity<ActivityTestRxBinding, RxViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.deBounceOperator(RxTextView.textChangeEvents(binding.editText).skipInitialValue())
+        debounceOperator()
         addObservable()
         addListeners()
         formValidation()
+    }
+
+    private fun debounceOperator() {
+        viewModel.deBounceOperator(RxTextView.textChangeEvents(binding.editText).skipInitialValue())
     }
 
     private fun addListeners() {
@@ -58,39 +65,47 @@ class TestRXActivity : BaseActivity<ActivityTestRxBinding, RxViewModel>() {
                 it.toString()
             }
 
-        val spannable = SpannableString("should contain uppercase,number,symbols")//6,7,9,6,7
+        val spannable = SpannableString(getString(R.string.spannable_text))//6,7,9,6,7
 
+        isValidForm(userNameObservable, passwordObservable, spannable)
+    }
+
+    private fun isValidForm(
+        userNameObservable: Observable<String>,
+        passwordObservable: Observable<String>,
+        spannable: SpannableString
+    ) {
         val isValid = viewModel.formValidation(userNameObservable, passwordObservable)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 with(it) {
-                    when {
-                        second is InvalidNameException -> binding.usernameEditText.error =
-                            second?.message
-
-                        second is InvalidPasswordException -> binding.passwordEditText.error =
-                            second?.message
-
-                        first.containsSymbols && first.containsNumber && first.containsUpperCase -> {
-                            updateSpannableTextAppearance(spannable,first)
-                            showToast(R.string.message_form_valid)
-                        }
-
-                        else -> updateSpannableTextAppearance(spannable,first)
-
-                    }
+                    handleFormHandlingResult(spannable)
                 }
                 binding.spannableTextView.text = spannable
             }
-
         disposable.addAll(isValid)
     }
 
-    private fun updateSpannableTextAppearance(spannable: SpannableString, stringValidation: StringValidation) {
+    private fun Pair<StringValidation, Exception?>.handleFormHandlingResult(
+        spannable: SpannableString
+    ) {
+        when (second) {
+            is InvalidNameException -> binding.usernameEditText.error =
+                second?.message
+            is InvalidPasswordException -> binding.passwordEditText.error =
+                second?.message
+            else -> updateSpannableTextAppearance(spannable, first)
+        }
+    }
+
+    private fun updateSpannableTextAppearance(
+        spannable: SpannableString,
+        stringValidation: StringValidation
+    ) {
         uppercaseSpan(spannable, stringValidation.containsUpperCase)
-        numberSpan(spannable,stringValidation.containsNumber)
-        symbolSpan(spannable,stringValidation.containsSymbols)
+        numberSpan(spannable, stringValidation.containsNumber)
+        symbolSpan(spannable, stringValidation.containsSymbols)
     }
 
     private fun uppercaseSpan(spannable: SpannableString, isColored: Boolean) {
@@ -103,7 +118,6 @@ class TestRXActivity : BaseActivity<ActivityTestRxBinding, RxViewModel>() {
             14, 24,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
-
     }
 
     private fun numberSpan(spannable: SpannableString, isColored: Boolean) {

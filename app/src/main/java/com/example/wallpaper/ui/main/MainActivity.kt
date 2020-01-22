@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.widget.ImageView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.Observer
+import androidx.lifecycle.Transformations
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
@@ -18,11 +19,12 @@ import com.example.wallpaper.ui.base.BaseActivity
 import com.example.wallpaper.ui.detail.DetailActivity
 import com.example.wallpaper.ui.rx.TestRXActivity
 import com.example.wallpaper.utils.KEY_INTENT_BUNDLE
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(),
     MainRecyclerAdapter.ItemClickListener {
 
-    override fun getViewModelClass(): Class<MainViewModel> = MainViewModel::class.java
+    override val viewModel: MainViewModel by viewModel()
 
     override fun getLayoutId(): Int = R.layout.activity_main
 
@@ -78,4 +80,3 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(),
         return super.onOptionsItemSelected(item)
     }
 }
-
