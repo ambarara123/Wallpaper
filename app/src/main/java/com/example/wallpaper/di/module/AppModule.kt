@@ -20,13 +20,13 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideContext(application: MyApplication): Context {
+    fun provideContext(application: MyApplication): Context{
         return application
     }
 
     @Provides
     @Singleton
-    fun provideDownloadManagerUtlis(context: Context): DownloadMangerUtil{
+    fun provideDownloadManagerUtils(context: Context): DownloadMangerUtil{
         return DownloadMangerUtil(context)
     }
 
