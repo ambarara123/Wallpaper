@@ -87,10 +87,6 @@ class RxViewModel @Inject constructor(
             name.isEmpty() -> Pair(checkString, InvalidNameException())
             password.isEmpty() -> Pair(checkString, InvalidPasswordException())
 
-            /*checkString.second -> Pair(4, null)
-            checkString.first == 1 -> Pair(1, InvalidPasswordException())
-            checkString.first == 2 -> Pair(2, InvalidPasswordException())
-            checkString.first == 3 -> Pair(3, InvalidPasswordException())*/
             else -> Pair(checkString, null)
         }
     }

@@ -20,7 +20,6 @@ import com.example.wallpaper.network.model.ImageModel
 import com.example.wallpaper.ui.base.BaseActivity
 import com.example.wallpaper.utils.*
 import com.jakewharton.rxbinding2.view.RxView
-import timber.log.Timber
 
 class DetailActivity : BaseActivity<ActivityDetailBinding, DetailViewModel>() {
 
@@ -59,9 +58,6 @@ class DetailActivity : BaseActivity<ActivityDetailBinding, DetailViewModel>() {
 
     private fun addListeners() {
         viewModel.checkButtonClick(RxView.clicks(binding.downloadBtn))
-        viewModel.checkButtonClick(RxView.clicks(binding.debounceBtn))
-
-        binding.debounceBtn.setOnClickListener { Timber.d("Native click listener called!") }
 
         with(binding) {
 
