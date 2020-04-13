@@ -19,4 +19,7 @@ class MyApplication : DaggerApplication() {
     private fun plantTimber() {
         Timber.plant(Timber.DebugTree())
     }
+    private  fun demo(){
+        print("hi");
+    }
 }
